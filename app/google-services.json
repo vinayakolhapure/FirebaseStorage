@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "990076183518",
+    "firebase_url": "https://firestorage-781cc.firebaseio.com",
+    "project_id": "firestorage-781cc",
+    "storage_bucket": "firestorage-781cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990076183518:android:bfb8643f573ee4b0",
+        "android_client_info": {
+          "package_name": "com.example.vinayak.firestorage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990076183518-njir69cqm43m1eut3ep7nof5uet74jeo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vinayak.firestorage",
+            "certificate_hash": "BFE6B63DF247D2A8D408824E008BB7EA9F6C97D8"
+          }
+        },
+        {
+          "client_id": "990076183518-oreul82n16jq2mlrrdms9kruvfq7n079.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuVudMWQfDxZZC-ErZkAdhtFKcxIIhsL0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990076183518-oreul82n16jq2mlrrdms9kruvfq7n079.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
