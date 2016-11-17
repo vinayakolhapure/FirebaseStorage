@@ -11,4 +11,5 @@
     <string name="cancel">Cancel</string>
     <string name="profile_pic">Click to Add Profile Picture</string>
     <string name="logout">LogOut</string>
+    <string name="messageHint">Please type your msg...</string>
 </resources>

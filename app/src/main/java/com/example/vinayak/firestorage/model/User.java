@@ -1,4 +1,4 @@
-package com.example.vinayak.firestorage;
+package com.example.vinayak.firestorage.model;
 
 /**
  * Created by Vinayak on 11/12/2016.

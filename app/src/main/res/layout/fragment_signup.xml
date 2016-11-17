@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.vinayak.firestorage.SignupFragment">
+    tools:context=".fragment.SignupFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,7 +41,8 @@
         android:id="@+id/etSignupEmail"
         android:layout_below="@+id/textViewEmail"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:inputType="textEmailAddress"/>
 
     <TextView
         android:layout_width="wrap_content"

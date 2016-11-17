@@ -1,4 +1,4 @@
-package com.example.vinayak.firestorage;
+package com.example.vinayak.firestorage.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,9 +21,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.vinayak.firestorage.R;
+import com.example.vinayak.firestorage.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +37,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.UUID;
 
 public class SignupFragment extends Fragment {
 
@@ -156,7 +156,7 @@ public class SignupFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Log.d("demo", "In OnSignup " + task.isSuccessful());
-                    Toast.makeText(getActivity(), "com.example.vinayak.firestorage.User Signed up: " + name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Signed up: " + name, Toast.LENGTH_SHORT).show();
                     final User user = new User();
                     user.setFullName(name);
                     user.setEmail(email);
@@ -169,7 +169,7 @@ public class SignupFragment extends Fragment {
                         bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
                         byte[] data = baos.toByteArray();
 
-                        String path = "firestorage/" + UUID.randomUUID() + ".png";
+                        String path = "firestorage/" + uid + ".png";
                         pd.show();
                         StorageReference firestorageRef = storage.getReference(path);
                         UploadTask uploadTask = firestorageRef.putBytes(data);
