@@ -112,7 +112,7 @@ public class MessageFragment extends Fragment {
                 addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(receivedMsgViewCounter == 0) {
+                //if(receivedMsgViewCounter == 0) {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Message message = new Message();
                         message.setMsgText((String) snapshot.child("messageText").getValue());
@@ -129,8 +129,8 @@ public class MessageFragment extends Fragment {
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
-                    receivedMsgViewCounter +=1;
-                }
+                //    receivedMsgViewCounter +=1;
+                //}
             }
 
             @Override
@@ -163,6 +163,7 @@ public class MessageFragment extends Fragment {
                         child("messageDate").setValue(formattedDate);
 
                 messageList.add(message);
+                msgText.setText("");
                 if(messageList.size()==1) {
                     adapter = new MessageAdapter(getActivity(),R.layout.row_layout_msgs,
                             messageList);
