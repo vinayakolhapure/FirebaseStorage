@@ -1,5 +1,6 @@
 package com.example.vinayak.firestorage;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -15,10 +16,17 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnF
         MessageFragment.OnFragmentInteractionListener {
 
     private FirebaseAuth mAuth;
+    private static int WELCOME_COUNT = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(WELCOME_COUNT == 0){
+            WELCOME_COUNT +=1;
+            Intent welcomeIntent = new Intent(MainActivity.this, Welcome.class);
+            startActivity(welcomeIntent);
+        }
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();

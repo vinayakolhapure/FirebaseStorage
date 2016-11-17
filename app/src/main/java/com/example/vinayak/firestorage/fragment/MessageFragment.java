@@ -144,7 +144,7 @@ public class MessageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Date today = Calendar.getInstance().getTime();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss a");
                 String formattedDate = formatter.format(today);
 
                 Message message = new Message();
