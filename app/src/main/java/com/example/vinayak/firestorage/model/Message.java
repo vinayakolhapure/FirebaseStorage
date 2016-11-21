@@ -1,5 +1,7 @@
 package com.example.vinayak.firestorage.model;
 
+import java.util.Comparator;
+
 /**
  * Created by Vinayak on 11/16/2016.
  */
@@ -8,6 +10,13 @@ public class Message {
     String senderId;
     String receiverId;
     String msgText;
+
+    public static Comparator<Message> DateOrder = new Comparator<Message>() {
+        @Override
+        public int compare(Message lhs, Message rhs) {
+            return lhs.getMsgDate().compareTo(rhs.getMsgDate());
+        }
+    };
 
     public String getMsgDate() {
         return msgDate;

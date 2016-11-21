@@ -24,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class MessageFragment extends Fragment {
@@ -120,6 +122,7 @@ public class MessageFragment extends Fragment {
                         message.setSenderId((String) snapshot.child("senderID").getValue());
                         message.setReceiverId((String) snapshot.child("receiverId").getValue());
                         messageList.add(message);
+                        Collections.sort(messageList,Message.DateOrder);
                     }
                     if(adapter!=null) {
                         adapter.notifyDataSetChanged();
