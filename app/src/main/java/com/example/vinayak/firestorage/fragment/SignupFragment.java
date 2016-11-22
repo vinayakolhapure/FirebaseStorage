@@ -198,6 +198,7 @@ public class SignupFragment extends Fragment{
                     }
                 } else {
                     Log.d("demo", task.getException().toString());
+                    Toast.makeText(getActivity(), task.getException().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
