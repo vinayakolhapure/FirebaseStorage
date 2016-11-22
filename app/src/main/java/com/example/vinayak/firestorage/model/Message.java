@@ -8,6 +8,15 @@ public class Message {
     String senderId;
     String receiverId;
     String msgText;
+    String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getMsgDate() {
         return msgDate;

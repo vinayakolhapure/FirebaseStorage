@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vinayak.firestorage.model.Message;
 import com.example.vinayak.firestorage.R;
+import com.example.vinayak.firestorage.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -45,11 +47,15 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         }
 
         TextView msgText = (TextView) convertView.findViewById(R.id.textViewMsgText);
+        ImageView imageMsg = (ImageView) convertView.findViewById(R.id.imageViewImage);
         TextView msgDate = (TextView) convertView.findViewById(R.id.textViewDate);
 
         Message message = mData.get(position);
         if(!mAuth.getCurrentUser().getUid().equals(message.getReceiverId())) {
             msgText.setText("You: " + message.getMsgText());
+            if(message.getImageUrl()!=""){
+                Picasso.with(getContext()).load(message.getImageUrl()).fit().into(imageMsg);
+            }
         } else {
             msgText.setText(message.getMsgText());
         }

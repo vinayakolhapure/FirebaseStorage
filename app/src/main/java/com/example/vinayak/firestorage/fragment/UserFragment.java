@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -71,7 +72,7 @@ public class UserFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         textViewWelcome = (TextView) getActivity().findViewById(R.id.textViewWelcom);
-        //imageViewUser = (ImageView) getActivity().findViewById(R.id.ivUserProfile);
+        imageViewUser = (ImageView) getActivity().findViewById(R.id.ivUserProfile);
         listView = (ListView) getActivity().findViewById(R.id.listView);
         usersList = new ArrayList<User>();
 
@@ -97,6 +98,15 @@ public class UserFragment extends Fragment {
                             } else {
                                 textViewWelcome.setText(((String) userSnapShot.
                                         child("fullName").getValue()).toUpperCase() + "'s " + "Contacts");
+                                Picasso.with(getContext()).load(((String) userSnapShot.
+                                        child("imageUrl").getValue())).fit().into(imageViewUser);
+
+                                imageViewUser.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mListener.goToProfilePicFragment();
+                                    }
+                                });
                             }
                         }
                         adapter = new ContactsAdapter(getActivity(),R.layout.item_row_contacts,
@@ -163,6 +173,7 @@ public class UserFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction();
+        void goToProfilePicFragment();
         void goToMessageFragment(String uid, String clickedUserUid);
     }
 }

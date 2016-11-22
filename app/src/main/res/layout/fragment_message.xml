@@ -40,4 +40,15 @@
         android:layout_marginTop="24dp"
         android:layout_above="@+id/editTextMessage"
         android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewGallery"
+        android:src="@drawable/gallery"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/editTextMessage"
+        android:layout_toEndOf="@+id/editTextMessage"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp" />
 </RelativeLayout>

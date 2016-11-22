@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.vinayak.firestorage.fragment.LoginFragment;
 import com.example.vinayak.firestorage.fragment.MessageFragment;
+import com.example.vinayak.firestorage.fragment.ProfilePicFragment;
 import com.example.vinayak.firestorage.fragment.SignupFragment;
 import com.example.vinayak.firestorage.fragment.UserFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.OnFragmentInteractionListener,
         SignupFragment.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener,
-        MessageFragment.OnFragmentInteractionListener {
+        MessageFragment.OnFragmentInteractionListener, ProfilePicFragment.OnFragmentInteractionListener  {
 
     private FirebaseAuth mAuth;
     private static int WELCOME_COUNT = 0;
@@ -76,6 +77,15 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnF
         getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, new LoginFragment(), "login_fragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goToProfilePicFragment() {
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new ProfilePicFragment(), "profilePic_fragment")
                 .addToBackStack(null)
                 .commit();
     }

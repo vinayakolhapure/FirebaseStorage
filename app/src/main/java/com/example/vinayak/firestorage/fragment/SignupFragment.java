@@ -38,7 +38,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-public class SignupFragment extends Fragment {
+public class SignupFragment extends Fragment{
 
     private EditText editTextName,editTextEmail,editTextPass;
     private Button buttonSignup, buttonCancel;
@@ -132,18 +132,20 @@ public class SignupFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Uri selectedImageUri = data.getData();
-        String[] filePathColumn = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getActivity().getContentResolver().query(selectedImageUri,
-                filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String imgDecodableString = cursor.getString(columnIndex);
-        imageString = imgDecodableString;
+        if(requestCode == 1 && data!=null){
+            Uri selectedImageUri = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getActivity().getContentResolver().query(selectedImageUri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String imgDecodableString = cursor.getString(columnIndex);
+            imageString = imgDecodableString;
 //      imageView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-        cursor.close();
-
+            cursor.close();
+        }else if(data==null){
+            Toast.makeText(getActivity(),"You didn't select any image",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void onSignup() {
@@ -200,6 +202,16 @@ public class SignupFragment extends Fragment {
             }
         });
     }
+
+/*    private void signOut(){
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                Toast.makeText(getActivity(),"",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }*/
+
 
     public interface OnFragmentInteractionListener {
         void goToUserFromSignup();

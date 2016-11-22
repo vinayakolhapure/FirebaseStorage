@@ -14,22 +14,27 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vinayak.firestorage.R;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment{
 
     EditText eEmail,ePwd;
     private FirebaseAuth mAuth;
+    GoogleApiClient mGoogleApiClient;
+    private static final int RC_SIGN_IN =9001;
+    SignInButton signInButton;
 
     private OnFragmentInteractionListener mListener;
+    LoginFragment loginFragmentContext;
 
     public LoginFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +63,8 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        signInButton = (SignInButton)getActivity().findViewById(R.id.sign_in_button);
         eEmail = (EditText) getActivity().findViewById(R.id.editTextEmail);
         ePwd = (EditText) getActivity().findViewById(R.id.editTextPwd);
         mAuth = FirebaseAuth.getInstance();
