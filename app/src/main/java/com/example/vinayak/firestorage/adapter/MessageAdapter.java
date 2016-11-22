@@ -52,9 +52,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         Message message = mData.get(position);
         if(!mAuth.getCurrentUser().getUid().equals(message.getReceiverId())) {
-            msgText.setText("You: " + message.getMsgText());
+            msgText.setText(message.getMsgText()==null ? "You " : "You: " + message.getMsgText());
         } else {
-            msgText.setText(message.getMsgText());
+            msgText.setText(message.getMsgText()==null? "" : message.getMsgText());
         }
 
         if(message.getImageUrl()!=""){

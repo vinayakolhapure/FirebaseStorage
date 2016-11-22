@@ -150,7 +150,7 @@ public class ProfilePicFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1 && data!=null){
+        if(data!=null){
             Uri selectedImageUri = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
             Cursor cursor = getActivity().getContentResolver().query(selectedImageUri,

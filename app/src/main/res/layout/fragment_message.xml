@@ -25,10 +25,10 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:id="@+id/imageSend"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:src="@android:drawable/ic_menu_send" />
+        android:src="@android:drawable/ic_menu_send"
+        android:layout_alignBottom="@+id/editTextMessage"
+        android:layout_toLeftOf="@+id/imageViewGallery"
+        android:layout_toStartOf="@+id/imageViewGallery" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -42,14 +42,12 @@
         android:layout_marginBottom="10dp" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:id="@+id/imageViewGallery"
         android:src="@drawable/gallery"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/editTextMessage"
-        android:layout_toEndOf="@+id/editTextMessage"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp" />
+        android:layout_alignTop="@+id/imageSend"
+        android:layout_alignRight="@+id/listViewMsg"
+        android:layout_alignEnd="@+id/listViewMsg" />
     
 </RelativeLayout>
