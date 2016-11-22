@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.example.vinayak.firestorage.model.Message;
 import com.example.vinayak.firestorage.R;
 import com.example.vinayak.firestorage.adapter.MessageAdapter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -77,7 +78,9 @@ public class MessageFragment extends Fragment {
 
         messageList = new ArrayList<Message>();
 
-        mDatabase.child("messages").child(uid+clickedUid).addValueEventListener(new ValueEventListener() {
+        DatabaseReference sendRef = mDatabase.child("messages").child(uid+clickedUid);
+
+        sendRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d("demo", "REF " + dataSnapshot.getRef());
@@ -88,7 +91,7 @@ public class MessageFragment extends Fragment {
                         Message message = new Message();
                         message.setMsgText((String) snapshot.child("messageText").getValue());
                         message.setMsgDate((String) snapshot.child("messageDate").getValue());
-                        message.setSenderId((String) snapshot.child("senderID").getValue());
+                        message.setSenderId((String) snapshot.child("senderId").getValue());
                         message.setReceiverId((String) snapshot.child("receiverId").getValue());
                         messageList.add(message);
                     }
@@ -110,30 +113,82 @@ public class MessageFragment extends Fragment {
             }
         });
 
-        mDatabase.child("messages").child(clickedUid+uid).
-                addValueEventListener(new ValueEventListener() {
+        /*final ValueEventListener receivedListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //if(receivedMsgViewCounter == 0) {
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Message message = new Message();
-                        message.setMsgText((String) snapshot.child("messageText").getValue());
-                        message.setMsgDate((String) snapshot.child("messageDate").getValue());
-                        message.setSenderId((String) snapshot.child("senderID").getValue());
-                        message.setReceiverId((String) snapshot.child("receiverId").getValue());
-                        messageList.add(message);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Message message = new Message();
+                    message.setMsgText((String) snapshot.child("messageText").getValue());
+                    message.setMsgDate((String) snapshot.child("messageDate").getValue());
+                    message.setSenderId((String) snapshot.child("senderID").getValue());
+                    message.setReceiverId((String) snapshot.child("receiverId").getValue());
+                    messageList.add(message);
+                    if(messageList!=null)
                         Collections.sort(messageList,Message.DateOrder);
-                    }
-                    if(adapter!=null) {
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        adapter = new MessageAdapter(getActivity(), R.layout.row_layout_msgs,
-                                messageList);
-                        listView.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-                    }
-                //    receivedMsgViewCounter +=1;
-                //}
+                }
+                if(adapter!=null) {
+                    adapter.notifyDataSetChanged();
+                } else {
+                    adapter = new MessageAdapter(getActivity(), R.layout.row_layout_msgs,
+                            messageList);
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };*/
+
+        final DatabaseReference receivedRef = mDatabase.child("messages").child(clickedUid+uid);
+        //receivedRef.addValueEventListener(receivedListener);
+        //receivedRef.removeEventListener(receivedListener);
+
+        receivedRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("demo1", "here");
+                //receivedRef.removeEventListener(receivedListener);
+                //Message message = dataSnapshot.getValue(Message.class);
+                Message message = new Message();
+                message.setMsgText((String) dataSnapshot.child("messageText").getValue());
+                message.setMsgDate((String) dataSnapshot.child("messageDate").getValue());
+                message.setSenderId((String) dataSnapshot.child("senderId").getValue());
+                message.setReceiverId(uid);
+                if(message.getMsgDate()== null || message.getMsgDate().isEmpty()) {
+                    Date today = Calendar.getInstance().getTime();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss a");
+                    String formattedDate = formatter.format(today);
+                    message.setMsgDate(formattedDate);
+                }
+                messageList.add(message);
+                Collections.sort(messageList,Message.DateOrder);
+                if(adapter != null)
+                    adapter.notifyDataSetChanged();
+                else {
+                    adapter = new MessageAdapter(getActivity(), R.layout.row_layout_msgs,
+                            messageList);
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -141,6 +196,8 @@ public class MessageFragment extends Fragment {
 
             }
         });
+
+        Log.d("demo", "Test log " + messageList.size());
 
         //String uid = this.getArguments().getString("UID");
         imageSend.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +224,7 @@ public class MessageFragment extends Fragment {
 
                 messageList.add(message);
                 msgText.setText("");
+
                 if(messageList.size()==1) {
                     adapter = new MessageAdapter(getActivity(),R.layout.row_layout_msgs,
                             messageList);

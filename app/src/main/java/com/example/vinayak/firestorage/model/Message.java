@@ -14,7 +14,9 @@ public class Message {
     public static Comparator<Message> DateOrder = new Comparator<Message>() {
         @Override
         public int compare(Message lhs, Message rhs) {
-            return lhs.getMsgDate().compareTo(rhs.getMsgDate());
+            if (lhs.getMsgDate()!=null && rhs.getMsgDate()!=null)
+                return lhs.getMsgDate().compareTo(rhs.getMsgDate());
+            return 0;
         }
     };
 
