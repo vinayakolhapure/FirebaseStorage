@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vinayak.firestorage.model.Message;
 import com.example.vinayak.firestorage.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -46,6 +48,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         TextView msgText = (TextView) convertView.findViewById(R.id.textViewMsgText);
         TextView msgDate = (TextView) convertView.findViewById(R.id.textViewDate);
+        ImageView imageMsg = (ImageView) convertView.findViewById(R.id.imageViewImage);
 
         Message message = mData.get(position);
         if(!mAuth.getCurrentUser().getUid().equals(message.getReceiverId())) {
@@ -53,6 +56,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         } else {
             msgText.setText(message.getMsgText());
         }
+
+        if(message.getImageUrl()!=""){
+            Picasso.with(getContext()).load(message.getImageUrl()).fit().into(imageMsg);
+        }
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss a");
         PrettyTime prettyTime = new PrettyTime(new Locale("DEFAULT"));
         try {

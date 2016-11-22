@@ -10,6 +10,7 @@ public class Message {
     String senderId;
     String receiverId;
     String msgText;
+    String imageUrl;
 
     public static Comparator<Message> DateOrder = new Comparator<Message>() {
         @Override
@@ -50,5 +51,21 @@ public class Message {
 
     public void setMsgText(String msgText) {
         this.msgText = msgText;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public static Comparator<Message> getDateOrder() {
+        return DateOrder;
+    }
+
+    public static void setDateOrder(Comparator<Message> dateOrder) {
+        DateOrder = dateOrder;
     }
 }
