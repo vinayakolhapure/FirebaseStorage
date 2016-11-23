@@ -19,8 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.vinayak.firestorage.R;
@@ -45,6 +47,7 @@ public class SignupFragment extends Fragment{
     private ProgressDialog pd;
     private DatabaseReference mDatabase;
     private ImageView imageView;
+    private Switch switchButton;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private FirebaseAuth mAuth;
@@ -100,8 +103,20 @@ public class SignupFragment extends Fragment{
         buttonSignup = (Button) getActivity().findViewById(R.id.buttonSignup);
         buttonCancel = (Button) getActivity().findViewById(R.id.buttonCancel);
         imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+        switchButton = (Switch) getActivity().findViewById(R.id.switch1);
+
         pd = new ProgressDialog(getActivity());
         pd.setMessage("Uploading Profile Picture...");
+
+        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    switchButton.setText("F");
+                else
+                    switchButton.setText("M");
+            }
+        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +156,7 @@ public class SignupFragment extends Fragment{
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String imgDecodableString = cursor.getString(columnIndex);
             imageString = imgDecodableString;
+            Toast.makeText(getActivity(), "Image saved. Click on icon to change image", Toast.LENGTH_SHORT).show();
 //      imageView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
             cursor.close();
         }else if(data==null){
@@ -152,6 +168,7 @@ public class SignupFragment extends Fragment{
         final String name = editTextName.getText().toString();
         final String email = editTextEmail.getText().toString();
         final String password = editTextPass.getText().toString();
+        final String gender = switchButton.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -163,6 +180,7 @@ public class SignupFragment extends Fragment{
                     user.setFullName(name);
                     user.setEmail(email);
                     user.setPassword(password);
+                    user.setGender(gender);
                     final String uid = mAuth.getCurrentUser().getUid();
 
                     if(imageString!=null) {
@@ -185,6 +203,7 @@ public class SignupFragment extends Fragment{
                                 mDatabase.child("users").child(uid).child("fullName").setValue(user.getFullName());
                                 mDatabase.child("users").child(uid).child("email").setValue(user.getEmail());
                                 mDatabase.child("users").child(uid).child("password").setValue(user.getPassword());
+                                mDatabase.child("users").child(uid).child("gender").setValue(user.getGender());
                                 mListener.goToUserFromSignup();
                             }
                         });
@@ -193,6 +212,7 @@ public class SignupFragment extends Fragment{
                         mDatabase.child("users").child(uid).child("email").setValue(user.getEmail());
                         mDatabase.child("users").child(uid).child("password").setValue(user.getPassword());
                         mDatabase.child("users").child(uid).child("imageUrl").setValue(null);
+                        mDatabase.child("users").child(uid).child("gender").setValue(user.getGender());
                         mListener.goToUserFromSignup();
                         Log.d("demo", user.toString());
                     }

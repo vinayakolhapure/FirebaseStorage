@@ -38,6 +38,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
@@ -55,6 +57,8 @@ public class ProfilePicFragment extends Fragment {
 
     private ImageView imageViewUser;
     TextView textViewName;
+    TextView textViewEmail;
+    TextView textViewGender;
     private static String imageString = null;
     private static String downloadURL = null;
 
@@ -92,8 +96,12 @@ public class ProfilePicFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
         textViewName = (TextView) getActivity().findViewById(R.id.textViewNam);
         imageViewUser = (ImageView) getActivity().findViewById(R.id.imageViewProfilePic);
+        textViewEmail = (TextView) getActivity().findViewById(R.id.textViewEmailProf);
+        textViewGender = (TextView) getActivity().findViewById(R.id.textViewGenderProf);
+
         usersList = new ArrayList<User>();
 
         pd = new ProgressDialog(getActivity());
@@ -113,6 +121,10 @@ public class ProfilePicFragment extends Fragment {
                             if (userSnapShot.getKey().equals(uid)) {
                                 textViewName.setText(((String) userSnapShot.
                                         child("fullName").getValue()).toUpperCase());
+                                textViewEmail.setText(((String) userSnapShot.
+                                        child("email").getValue()).toUpperCase());
+                                textViewGender.setText(((String) userSnapShot.
+                                        child("gender").getValue()).toUpperCase());
 
                                 Picasso.with(getContext()).load(((String) userSnapShot.
                                         child("imageUrl").getValue())).fit().into(imageViewUser);

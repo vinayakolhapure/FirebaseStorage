@@ -25,5 +25,21 @@
             android:layout_below="@+id/imageViewProfilePic"
             android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewEmailProf"
+        android:layout_below="@+id/textViewNam"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewGenderProf"
+        android:layout_below="@+id/textViewEmailProf"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+
+</RelativeLayout>

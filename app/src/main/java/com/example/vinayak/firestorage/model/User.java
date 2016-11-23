@@ -5,7 +5,7 @@ package com.example.vinayak.firestorage.model;
  */
 public class User {
 
-    String fullName,email,password, imageUrl;
+    String fullName,email,password, imageUrl, gender;
 
     public String getFullName() {
         return fullName;
@@ -37,6 +37,14 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @Override
