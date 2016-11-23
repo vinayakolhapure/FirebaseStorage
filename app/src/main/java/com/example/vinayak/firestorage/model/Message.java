@@ -11,6 +11,7 @@ public class Message {
     String receiverId;
     String msgText;
     String imageUrl;
+    String messageId;
 
     public static Comparator<Message> DateOrder = new Comparator<Message>() {
         @Override
@@ -20,6 +21,14 @@ public class Message {
             return 0;
         }
     };
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 
     public String getMsgDate() {
         return msgDate;

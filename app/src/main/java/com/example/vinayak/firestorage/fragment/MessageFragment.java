@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -127,16 +128,39 @@ public class MessageFragment extends Fragment {
 
         messageList = new ArrayList<Message>();
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Message deleteMessage = messageList.get(position);
+                DatabaseReference delRef = mDatabase.child("messages")
+                        .child(deleteMessage.getSenderId()+deleteMessage.getReceiverId())
+                        .child(deleteMessage.getMessageId());
+                messageList.remove(position);
+                adapter.notifyDataSetChanged();
+
+                delRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().removeValue();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                return true;
+            }
+        });
+
         DatabaseReference sendRef = mDatabase.child("messages").child(uid+clickedUid);
 
         sendRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("demo", "REF " + dataSnapshot.getRef());
+
                 if(messageList.size() == 0) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Log.d("demo", "SNAPSHOT REF " + snapshot.getRef());
-                        Log.d("demo", "Message Fragment For loop");
                         Message message = new Message();
                         if(snapshot.child("messageText").getValue()==null){
                             message.setImageUrl((String) snapshot.child("imageURL").getValue());
@@ -149,13 +173,14 @@ public class MessageFragment extends Fragment {
                         message.setMsgDate((String) snapshot.child("messageDate").getValue());
                         message.setSenderId((String) snapshot.child("senderId").getValue());
                         message.setReceiverId((String) snapshot.child("receiverId").getValue());
+                        message.setMessageId(snapshot.getKey());
                         messageList.add(message);
                     }
                     if(messageList.size()>0) {
-                        Log.d("demo", "Message Fragment If Size > 0");
                         if(getActivity() != null) {
                             adapter = new MessageAdapter(getActivity(), R.layout.row_layout_msgs,
                                     messageList);
+                            Collections.sort(messageList,Message.DateOrder);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }
@@ -169,45 +194,11 @@ public class MessageFragment extends Fragment {
             }
         });
 
-        /*final ValueEventListener receivedListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Message message = new Message();
-                    message.setMsgText((String) snapshot.child("messageText").getValue());
-                    message.setMsgDate((String) snapshot.child("messageDate").getValue());
-                    message.setSenderId((String) snapshot.child("senderID").getValue());
-                    message.setReceiverId((String) snapshot.child("receiverId").getValue());
-                    messageList.add(message);
-                    if(messageList!=null)
-                        Collections.sort(messageList,Message.DateOrder);
-                }
-                if(adapter!=null) {
-                    adapter.notifyDataSetChanged();
-                } else {
-                    adapter = new MessageAdapter(getActivity(), R.layout.row_layout_msgs,
-                            messageList);
-                    listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };*/
-
         final DatabaseReference receivedRef = mDatabase.child("messages").child(clickedUid+uid);
-        //receivedRef.addValueEventListener(receivedListener);
-        //receivedRef.removeEventListener(receivedListener);
 
         receivedRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d("demo1", "here");
-
                 Message message = new Message();
                 if(dataSnapshot.child("messageText").getValue()==null){
                     message.setImageUrl((String) dataSnapshot.child("imageURL").getValue());
@@ -224,6 +215,7 @@ public class MessageFragment extends Fragment {
                     String formattedDate = formatter.format(today);
                     message.setMsgDate(formattedDate);
                 }
+                message.setMessageId(dataSnapshot.getKey());
                 messageList.add(message);
                 Collections.sort(messageList,Message.DateOrder);
                 if(adapter != null)
@@ -231,6 +223,7 @@ public class MessageFragment extends Fragment {
                 else {
                     adapter = new MessageAdapter(getActivity(), R.layout.row_layout_msgs,
                             messageList);
+                    Collections.sort(messageList,Message.DateOrder);
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -256,9 +249,6 @@ public class MessageFragment extends Fragment {
 
             }
         });
-
-        Log.d("demo", "Test log " + messageList.size());
-
         //String uid = this.getArguments().getString("UID");
         imageSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,6 +264,7 @@ public class MessageFragment extends Fragment {
                 message.setSenderId(uid);
                 message.setImageUrl("");
                 String key = mDatabase.child("messages").child(uid+clickedUid).push().getKey();
+                message.setMessageId(key);
                 mDatabase.child("messages").child(uid+clickedUid).child(key).
                         child("messageText").setValue(msgText.getText().toString());
                 mDatabase.child("messages").child(uid+clickedUid).child(key).
@@ -287,7 +278,7 @@ public class MessageFragment extends Fragment {
 
                 messageList.add(message);
                 msgText.setText("");
-
+                Collections.sort(messageList,Message.DateOrder);
                 if(messageList.size()==1) {
                     adapter = new MessageAdapter(getActivity(),R.layout.row_layout_msgs,
                             messageList);
@@ -327,7 +318,7 @@ public class MessageFragment extends Fragment {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String imgDecodableString = cursor.getString(columnIndex);
             cursor.close();
-            Log.d("Image", imgDecodableString);
+
             file = Uri.fromFile(new File(imgDecodableString));
             pd.setMessage("Loading..");
             pd.show();
@@ -340,7 +331,6 @@ public class MessageFragment extends Fragment {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle unsuccessful uploads
-                    Log.d("Upload Failure","Couldn't upload image");
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -358,6 +348,7 @@ public class MessageFragment extends Fragment {
                     message.setSenderId(uid);
                     message.setImageUrl(downloadUrl.toString());
                     String key = mDatabase.child("messages").child(uid+clickedUid).push().getKey();
+                    message.setMessageId(key);
                     mDatabase.child("messages").child(uid+clickedUid).child(key).
                             child("messageText").setValue(null);
                     mDatabase.child("messages").child(uid+clickedUid).child(key).
@@ -370,6 +361,7 @@ public class MessageFragment extends Fragment {
                             child("imageURL").setValue(downloadUrl.toString());
 
                     messageList.add(message);
+                    Collections.sort(messageList,Message.DateOrder);
                     if(messageList.size()==1) {
                         adapter = new MessageAdapter(getActivity(),R.layout.row_layout_msgs,
                                 messageList);
